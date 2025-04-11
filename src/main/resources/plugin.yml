@@ -1,0 +1,4 @@
+name: RookieAirDrops
+version: '1.0-SNAPSHOT'
+main: com.cuzz.rookieAirDrops.RookieAirDrops
+api-version: '1.21'
