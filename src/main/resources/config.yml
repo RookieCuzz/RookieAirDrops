@@ -1,0 +1,34 @@
+
+AirDrops:
+  红色空投:
+    #模型名字
+    ModelName: "red_airdrops"
+    #爆炸粒子颜色
+    DustColor: rrggbb
+    #插件@凋落物@数量@几率
+    Loot:
+      - "vanilla:apple@1@0.9"
+      - "vanilla:stone@2@1"
+      - "vanilla:diamond@4@0.9"
+    #基础生成率
+    SpawnRate: 0.9
+    #一次调度生成几个
+    Amount: 3
+    #生成的时间间隔
+    TimeGap:
+      Min: 10 #单位分钟
+      Max: 60
+    #空投的存活时间
+    LifeTime: 30 #单位分钟
+  紫色空投:
+    ModelName: "red_airdrops"
+    DustColor: rrggbb
+    Loot:
+      - "vanilla:apple@1@0.9"
+      - "vanilla:stone@2@1"
+      - "vanilla:diamond@4@0.9"
+    SpawnRate: 0.9
+    TimeGap:
+      Min: 10 #单位分钟
+      Max: 60
+    LifeTime: 30 #单位分钟

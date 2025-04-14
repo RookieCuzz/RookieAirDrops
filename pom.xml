@@ -68,5 +68,19 @@
             <version>1.21-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.ticxo</groupId>
+            <artifactId>modelengine</artifactId>
+            <version>4.0.7</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/ModelEngine-4.0.7 (1).jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>io.th0rgal</groupId>
+            <artifactId>oraxen</artifactId>
+            <version>1.174.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/oraxen-1.186.1.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

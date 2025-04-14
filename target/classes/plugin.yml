@@ -1,5 +1,5 @@
 name: RookieAirDrops
-version: '${project.version}'
+version: '1.0-SNAPSHOT'
 main: com.cuzz.rookieairdrops.RookieAirDrops
 api-version: '1.21'
 depend: [ModelEngine, Oraxen]
