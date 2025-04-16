@@ -20,24 +20,26 @@ public class Crate {
     private final Location location;
     private final World world;
     private final List<ItemStack> items;
+    private final String blockName;
     private Block chestBlock;
     private Entity displayEntity;
     private FallingBlock fallingCrate;
 
-    public Crate(Location location, World world, List<ItemStack> items) {
+    public Crate(Location location, World world, List<ItemStack> items, String blockName) {
         this.location = location;
         this.world = world;
         this.items = items;
+        this.blockName = blockName;
     }
 
     public void dropCrate() {
         // 获取 Oraxen 方块数据
-        BlockData oraxenBlockData = OraxenBlocks.getOraxenBlockData("airballoon");
+        BlockData oraxenBlockData = OraxenBlocks.getOraxenBlockData(blockName);
         if (oraxenBlockData != null) {
             // 生成下落的方块
             fallingCrate = world.spawnFallingBlock(location, oraxenBlockData);
             fallingCrate.setGlowing(true);
-            fallingCrate.setCustomName("§6空投箱");
+            fallingCrate.setCustomName("§7坠落中.....");
             fallingCrate.setCustomNameVisible(true);
             
             // 禁用重力
@@ -59,7 +61,7 @@ public class Crate {
             // 添加到箱子列表
             CrateList.getCrateMap().put(fallingCrate, this);
         } else {
-            Bukkit.getLogger().warning("方块获取失败");
+            Bukkit.getLogger().warning("方块获取失败: " + blockName);
         }
     }
 
@@ -104,5 +106,9 @@ public class Crate {
 
     public FallingBlock getFallingCrate() {
         return fallingCrate;
+    }
+    
+    public String getBlockName() {
+        return blockName;
     }
 } 

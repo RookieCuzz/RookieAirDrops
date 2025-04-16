@@ -26,69 +26,72 @@ public class AirdropConfig {
     }
 
     public void loadConfig() {
-        plugin.saveDefaultConfig();
-        plugin.reloadConfig();
-        FileConfiguration config = plugin.getConfig();
+        // 清空现有配置
+        airdropTypes.clear();
         
-        ConfigurationSection airdropsSection = config.getConfigurationSection("AirDrops");
-        if (airdropsSection == null) {
-            plugin.getLogger().warning("配置文件中没有找到 AirDrops 部分，将使用默认配置");
+        // 获取配置文件中的空投配置
+        ConfigurationSection airDropsSection = plugin.getConfig().getConfigurationSection("AirDrops");
+        if (airDropsSection == null) {
+            plugin.getLogger().warning("配置文件中没有找到 AirDrops 节点！");
             return;
         }
-
-        for (String key : airdropsSection.getKeys(false)) {
-            ConfigurationSection typeSection = airdropsSection.getConfigurationSection(key);
-            if (typeSection == null) {
-                continue;
+        
+        // 遍历所有空投类型
+        for (String typeName : airDropsSection.getKeys(false)) {
+            ConfigurationSection typeSection = airDropsSection.getConfigurationSection(typeName);
+            if (typeSection == null) continue;
+            
+            // 创建空投类型对象
+            AirdropType airdropType = new AirdropType();
+            airdropType.setName(typeName);
+            airdropType.setModelName(typeSection.getString("ModelName", "default_model"));
+            airdropType.setDustColor(parseColor(typeSection.getString("DustColor", "FFFFFF")));
+            airdropType.setSpawnRate(typeSection.getDouble("SpawnRate", 1.0));
+            airdropType.setBlock(typeSection.getString("Block", "airballoon"));
+            airdropType.setLifeTime(typeSection.getInt("LifeTime", 30));
+            
+            // 加载高度配置
+            ConfigurationSection heightSection = typeSection.getConfigurationSection("Height");
+            if (heightSection != null) {
+                airdropType.setHeightMin(heightSection.getInt("Min", 20));
+                airdropType.setHeightMax(heightSection.getInt("Max", 30));
+            } else {
+                // 设置默认高度范围
+                airdropType.setHeightMin(20);
+                airdropType.setHeightMax(30);
             }
-
-            AirdropType type = new AirdropType();
-            type.setName(key);
-            type.setModelName(typeSection.getString("ModelName", "hot_air_balloon"));
             
-            // 解析颜色
-            String colorStr = typeSection.getString("DustColor", "9400D3");
-            type.setDustColor(parseColor(colorStr));
-            
-            // 解析掉落物
-            List<LootItem> lootItems = new ArrayList<>();
-            ConfigurationSection lootSection = typeSection.getConfigurationSection("Loot");
-            if (lootSection != null) {
-                for (String lootKey : lootSection.getKeys(false)) {
-                    String lootStr = lootSection.getString(lootKey);
-                    if (lootStr == null) {
-                        continue;
-                    }
-                    
-                    String[] parts = lootStr.split("@");
-                    if (parts.length >= 3) {
-                        String itemStr = parts[0];
-                        int amount = Integer.parseInt(parts[1]);
-                        double chance = Double.parseDouble(parts[2]);
-                        
-                        Material material = Material.valueOf(itemStr.split(":")[1].toUpperCase());
-                        lootItems.add(new LootItem(material, amount, chance));
-                    }
-                }
-            }
-            type.setLootItems(lootItems);
-            
-            // 解析生成设置
-            type.setSpawnRate(typeSection.getDouble("SpawnRate", 0.9));
-            type.setAmount(typeSection.getInt("Amount", 1));
-            
+            // 加载时间间隔配置
             ConfigurationSection timeGapSection = typeSection.getConfigurationSection("TimeGap");
             if (timeGapSection != null) {
-                type.setMinTimeGap(timeGapSection.getInt("Min", 10));
-                type.setMaxTimeGap(timeGapSection.getInt("Max", 60));
+                airdropType.setMinTimeGap(timeGapSection.getInt("Min", 10));
+                airdropType.setMaxTimeGap(timeGapSection.getInt("Max", 60));
+            } else {
+                // 设置默认时间间隔
+                airdropType.setMinTimeGap(10);
+                airdropType.setMaxTimeGap(60);
             }
             
-            type.setLifeTime(typeSection.getInt("LifeTime", 30));
+            // 加载生成数量
+            airdropType.setAmount(typeSection.getInt("Amount", 1));
             
-            airdropTypes.put(key, type);
+            // 加载掉落物配置
+            List<String> lootList = typeSection.getStringList("Loot");
+            for (String lootEntry : lootList) {
+                String[] parts = lootEntry.split("@");
+                if (parts.length >= 3) {
+                    String itemId = parts[0];
+                    int amount = Integer.parseInt(parts[1]);
+                    double chance = Double.parseDouble(parts[2]);
+//                    airdropType.addLoot(itemId, amount, chance);
+                }
+            }
+            
+            // 将空投类型添加到配置中
+            airdropTypes.put(typeName, airdropType);
         }
         
-        plugin.getLogger().info("已加载 " + airdropTypes.size() + " 种空投类型");
+        plugin.getLogger().info("已加载 " + airdropTypes.size() + " 个空投类型配置");
     }
 
     private Color parseColor(String colorStr) {

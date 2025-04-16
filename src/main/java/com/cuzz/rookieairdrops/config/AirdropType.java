@@ -14,6 +14,9 @@ public class AirdropType {
     private int minTimeGap;
     private int maxTimeGap;
     private int lifeTime;
+    private String block;
+    private int heightMin;
+    private int heightMax;
 
     public String getName() {
         return name;
@@ -85,5 +88,29 @@ public class AirdropType {
 
     public void setLifeTime(int lifeTime) {
         this.lifeTime = lifeTime;
+    }
+    
+    public String getBlock() {
+        return block;
+    }
+    
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public int getHeightMin() {
+        return heightMin;
+    }
+
+    public void setHeightMin(int heightMin) {
+        this.heightMin = heightMin;
+    }
+
+    public int getHeightMax() {
+        return heightMax;
+    }
+
+    public void setHeightMax(int heightMax) {
+        this.heightMax = heightMax;
     }
 } 

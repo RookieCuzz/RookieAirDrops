@@ -46,9 +46,6 @@ public class AirdropListener implements Listener {
                     return;
                 }
                 
-                // 生成掉落物
-                List<ItemStack> items = airdropConfig.generateLoot(airdropType);
-
                 // 取消伤害事件
                 event.setCancelled(true);
 
@@ -65,12 +62,25 @@ public class AirdropListener implements Listener {
                     dustOptions
                 );
 
+                // 取消气球的移动任务
+                AirdropCommand airdropCommand = RookieAirDrops.getInstance().getAirdropCommand();
+                airdropCommand.cancelAirdropTask((Bee) damaged);
+
                 // 移除蜜蜂实体
                 damaged.remove();
 
+                // 获取方块名称
+                String blockName = airdropType.getBlock();
+                if (blockName == null || blockName.isEmpty()) {
+                    blockName = "airballoon"; // 默认方块
+                }
+
                 // 创建并投放箱子
-                Crate crate = new Crate(damaged.getLocation(), damaged.getWorld(), items);
+                Crate crate = new Crate(damaged.getLocation(), damaged.getWorld(), null, blockName);
                 crate.dropCrate();
+                
+                // 安排下一次空投生成
+                airdropCommand.scheduleNextAirdrop(airdropType);
             }
         }
     }
@@ -86,7 +96,7 @@ public class AirdropListener implements Listener {
             crate.spawnChest();
 
             // 获取 Oraxen 方块数据
-            BlockData oraxenBlockData = OraxenBlocks.getOraxenBlockData("airballoon");
+            BlockData oraxenBlockData = OraxenBlocks.getOraxenBlockData(crate.getBlockName());
             BlockData airBlockData = Bukkit.createBlockData(Material.BARRIER);
 
             // 从地图中移除箱子

@@ -56,12 +56,31 @@
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
+            <id>oraxen</id>
+            <name>Oraxen Repository</name>
+            <url>https://repo.oraxen.com/releases</url>
+        </repository>
+
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>lumine-public</id>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+
     </repositories>
 
     <dependencies>
+
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
@@ -75,6 +94,19 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/ModelEngine-4.0.7 (1).jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>MythicCrucible</artifactId>
+            <version>1.6.0-SNAPSHOT</version>
+            <scope>provided</scope> <!-- 相当于 compileOnly -->
+        </dependency>
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>Mythic-Dist</artifactId>
+            <version>5.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>io.th0rgal</groupId>
             <artifactId>oraxen</artifactId>
